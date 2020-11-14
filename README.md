@@ -12,7 +12,7 @@ Provides features for working with tree structure data in JavaScript.
 An object implementing `ITree<T>` interface can use functions in `Tree`.
 
 ```ts
-import Tree, { ITree } from 'tree-lib-js'
+import Tree, { ITree } from 'tree-util-js'
 
 class MyTreeClass implements ITree<MyTreeClass> {
   someProperty: string = ''
