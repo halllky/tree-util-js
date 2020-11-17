@@ -62,6 +62,23 @@ function remove<T extends ITree<T>>(source: T[], target: T) {
   }
 }
 
+/** ツリー中から第2引数の要素と合致するものを探し、第3引数のオブジェクトで置き換えます。 */
+function replace<T extends ITree<T>>(source: T[], target: T, replacer: T) {
+  const iterator = enumerate(source, 'depth-first')
+  for (const item of iterator) {
+    if (item !== target) continue;
+    const parent = findParent(source, item)
+    if (parent) {
+      const index = parent.children.indexOf(item)
+      parent.children.splice(index, 1, replacer)
+    } else {
+      const index = source.indexOf(item)
+      source.splice(index, 1, replacer)
+    }
+    return
+  }
+}
+
 // --------------
 
 /** 指定した要素の次の要素を取得します。 */
@@ -117,4 +134,5 @@ export default {
   prevOf,
   nextOf,
   remove,
+  replace,
 }
