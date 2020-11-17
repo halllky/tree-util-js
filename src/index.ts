@@ -67,12 +67,31 @@ function replace<T extends ITree<T>>(source: T[], target: T, replacer: T) {
   const iterator = enumerate(source, 'depth-first')
   for (const item of iterator) {
     if (item !== target) continue;
-    const parent = findParent(source, item)
+    const parent = findParent(source, target)
     if (parent) {
-      const index = parent.children.indexOf(item)
+      const index = parent.children.indexOf(target)
       parent.children.splice(index, 1, replacer)
     } else {
-      const index = source.indexOf(item)
+      const index = source.indexOf(target)
+      source.splice(index, 1, replacer)
+    }
+    return
+  }
+}
+
+/** ツリー中から第2引数の要素と合致するものを探し、第3引数のオブジェクトで置き換えます。ただし、第2引数の子要素についてはそのまま残します。 */
+function replaceOnlyItself<T extends ITree<T>>(source: T[], target: T, replacer: T) {
+  const iterator = enumerate(source, 'depth-first')
+  for (const item of iterator) {
+    if (item !== target) continue;
+    const parent = findParent(source, target)
+    if (parent) {
+      const index = parent.children.indexOf(target)
+      replacer.children = target.children
+      parent.children.splice(index, 1, replacer)
+    } else {
+      const index = source.indexOf(target)
+      replacer.children = target.children
       source.splice(index, 1, replacer)
     }
     return
@@ -135,4 +154,5 @@ export default {
   nextOf,
   remove,
   replace,
+  replaceOnlyItself,
 }
