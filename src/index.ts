@@ -22,6 +22,17 @@ function map<TSource extends ITree<TSource>, TResult extends ITree<TResult>>(roo
   return result
 }
 
+/** ツリーを一次元配列に変換します。 */
+function flat<TSource extends ITree<TSource>, TResult>(
+  root: TSource,
+  predicate: (arg: TSource) => TResult
+): TResult[] {
+  const result: TResult[] = []
+  const iterator = enumerate([root], 'depth-first')
+  for (const item of iterator) result.push(predicate(item))
+  return result
+}
+
 // --------------
 
 /** 自身または子要素のいずれかが指定の条件を満たしているかを調べます。 */
@@ -146,6 +157,7 @@ function* enumerateReverse<T extends ITree<T>>(source: T[], order: ITreeSearchOr
 export default {
   forEach,
   map,
+  flat,
   every,
   some,
   enumerate,
